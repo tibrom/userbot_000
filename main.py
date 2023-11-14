@@ -135,7 +135,8 @@ async def my_handler(client, message):
     print(message.chat.id)
 
 
-
+async def chat_member(client, chat_member_updated):
+    print(chat_member_updated)
 
 
 
@@ -148,6 +149,7 @@ async def main():
     await database.connect()
     app = Client("my_account", api_id=api_id, api_hash=api_hash)
     app.add_handler(MessageHandler(my_handler))
+    app.add_handler(ChatMemberUpdatedHandler(chat_member))
     await app.start()
     await idle()
 
