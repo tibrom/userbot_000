@@ -51,6 +51,22 @@ async def actual_chat_control(message):
             )
             await database.execute(query)
 
+async def other_chats_in_user(message):
+    chat = message.chat
+    if chat.type in (ChatType.GROUP, ChatType.SUPERGROUP, ChatType.CHANNEL):
+        search_query = chats.select().where(
+            chats.c.tg_chat_id == str(chat.id)
+        )
+        answer = await database.fetch_one(search_query)
+        if answer is None:
+            value = {
+                'tg_chat_id': str(chat.id),
+                'name': chat.title,
+                'is_writable': False
+            }
+            query = chats.insert().values(**value)
+            await database.execute(query)
+
 '''
 async def get_route(message):
     if message.text is None:
@@ -109,6 +125,8 @@ async def my_handler(client, message):
     chat = message.chat
     if hasattr(message, 'service'):
         await actual_chat_control(message)
+    else:
+        await other_chats_in_user(message)
     route = await get_route(message)
     for r in route:
         query = chats.select().where(
