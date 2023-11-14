@@ -89,7 +89,8 @@ async def get_route(message):
         for trigger in triggers:
             if trigger == '' or trigger ==' ':
                 continue
-            trigger.replace(" ", "").lower()
+            trigger = trigger.replace(" ", "").lower()
+            trigger = trigger.strip()
             print('trigger', trigger, message.text)
             if '_' in trigger:
                 tg = trigger.split('_')
