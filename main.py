@@ -35,7 +35,7 @@ async def actual_chat_control(message):
                 send_messager = chat.permissions.can_send_messages
                 value = {
                     'tg_chat_id': str(chat.id),
-                    'name': chat.title,
+                    'name': f'{chat.title} ({chat.username})',
                     'is_writable': send_messager
                 }
                 query = chats.insert().values(**value)
@@ -61,7 +61,7 @@ async def other_chats_in_user(message):
         if answer is None:
             value = {
                 'tg_chat_id': str(chat.id),
-                'name': chat.title,
+                'name': f'{chat.title} ({chat.username})',
                 'is_writable': False
             }
             query = chats.insert().values(**value)
@@ -138,7 +138,7 @@ async def my_handler(client, message):
         await client.forward_messages(chat_id, int(chat.id), message.id)
 
         await asyncio.sleep(0,5)
-        await client.send_message(chat_id, chat.title, reply_to_message_id=message.id)
+        await client.send_message(chat_id, f'источник: {chat.title} ({chat.username})', reply_to_message_id=message.id)
     
 
     print(message)
