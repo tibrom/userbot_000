@@ -125,8 +125,8 @@ async def my_handler(client, message):
     chat = message.chat
     if hasattr(message, 'service'):
         await actual_chat_control(message)
-    else:
-        await other_chats_in_user(message)
+    
+    await other_chats_in_user(message)
     route = await get_route(message)
     for r in route:
         query = chats.select().where(
