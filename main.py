@@ -135,8 +135,9 @@ async def my_handler(client, message):
     print(message.chat.id)
 
 
-async def chat_member(client, chat_member_updated):
-    print(chat_member_updated)
+async def chat_member(client, update: ChatMemberUpdated):
+    print("chat_member")
+    print(update)
 
 
 
