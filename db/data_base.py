@@ -21,5 +21,14 @@ message_routing = Table(
     Column('recipient_id', Integer, ForeignKey('chats.id', ondelete="CASCADE"), nullable=False),
     Column('trigger_words', String),
     Column('exclude_words', String),
-    Column('is_anonym', Boolean)
+    Column('is_anonym', Boolean),
+    Column('not_duplicate', Boolean)
+)
+
+text_data = Table(
+    'text_data',
+    metadata,
+    Column('id', Integer, primary_key=True, autoincrement=True, unique= True),
+    Column('chat_id', Integer, ForeignKey('chats.id', ondelete="CASCADE"), nullable=False),
+    Column('message_text', String)
 )

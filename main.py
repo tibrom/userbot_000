@@ -9,7 +9,7 @@ from pyrogram import filters
 from pyrogram.handlers import MessageHandler, UserStatusHandler, ChatMemberUpdatedHandler
 from pyrogram.types import ChatMemberUpdated
 
-from db.data_base import chats, message_routing
+from db.data_base import chats, message_routing, text_data
 from db.base import database
 
 
@@ -20,7 +20,10 @@ api_hash = "967046232d4fd5ad623f49fdba90592d"
 
 app = Client("my_account", api_id=api_id, api_hash=api_hash)
 
-
+class Route:
+    def __init__(self,  recipient_id,  is_anonym) -> None:
+        self.recipient_id = recipient_id
+        self.is_anonym = is_anonym
 
 
 async def actual_chat_control(message):
@@ -89,7 +92,34 @@ async def get_route(message):
     return result'''
 
 
+
+def words_control(words, message_text):
+    for word in words:
+        word = word.strip()
+        if word != '':
+            word = word.replace(" ", "").lower()
+            if '_' in word:  
+                wr = word.split('_')
+                if all(sub.replace(" ", "").lower() in   message_text.lower() for sub in wr):
+                    return True
+            elif word in message_text.lower():
+                return True
+    return False
+
+
+def short_text(text):
+    result = ''
+    text = text.strip()
+    data = text.split(' ')
+    for tx in  data:
+        tx.strip()
+        result += tx[0]
+    return result
+
+
+
 async def get_route(message):
+    duplex_control = []
     if message.text is None:
         return []
     result = []
@@ -98,24 +128,23 @@ async def get_route(message):
         chats.c.tg_chat_id == str(chat.id)
     )
     answer = await database.fetch_all(search_query)
+   
     for ans in answer:
-        if ans.recipient_id in result:
+        
+        if ans.recipient_id in duplex_control:
             continue
         triggers = ans.trigger_words.split(',')
-        for trigger in triggers:
-            if trigger == '' or trigger ==' ':
-                continue
-            trigger = trigger.replace(" ", "").lower()
-            trigger = trigger.strip()
-            print('trigger', trigger, message.text)
-            if '_' in trigger:
-                tg = trigger.split('_')
-                print('tg', tg)
-                if all(sub.replace(" ", "").lower() in  message.text.lower() for sub in tg):
-                    result.append(ans.recipient_id)
-            elif trigger in message.text.lower():
-                result.append(ans.recipient_id)
-    print(result)
+        stop_words = ans.exclude_words.split(',')
+        if words_control(words=stop_words, message_text=message.text):
+            continue
+        if words_control(words=triggers, message_text=message.text):
+            duplex_control.append(ans.recipient_id)
+            result.append(
+                Route(
+                    recipient_id=ans.recipient_id,
+                    is_anonym=ans.is_anonym
+                )
+            )
     return result
             
 
@@ -130,15 +159,30 @@ async def my_handler(client, message):
     route = await get_route(message)
     for r in route:
         query = chats.select().where(
-            chats.c.id == r
+            chats.c.id == r.recipient_id
         )
         answer = await database.fetch_one(query)
         chat_id = int(answer.tg_chat_id)
-        
-        await client.forward_messages(chat_id, int(chat.id), message.id)
-
-        await asyncio.sleep(0,5)
-        await client.send_message(chat_id, f'источник: {chat.title} ({chat.username})', reply_to_message_id=message.id)
+        if answer.not_duplicate:
+            short_text = short_text(message.text)
+            text_data.select().where(
+                text_data.c.message_text==short_text
+            )
+            answer = await database.fetch_one(query)
+            if answer is not None:
+                return
+            value = {
+                'chat_id': chat_id,
+                'message_text': short_text,
+            }
+            query = text_data.insert().values(**value)
+            await database.execute(query)
+        if r.is_anonym:
+            await client.send_message(chat_id, message.text)
+        else:
+            await client.forward_messages(chat_id, int(chat.id), message.id)
+            await asyncio.sleep(0,5)
+            await client.send_message(chat_id, f'источник: {chat.title} ({chat.username})', reply_to_message_id=message.id)
     
 
     print(message)
