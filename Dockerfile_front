@@ -13,7 +13,6 @@ RUN pip install -U Flask
 
 
 COPY . /data
-COPY ./static /data/front/static
 
 
 CMD ["python", "./front/app.py"]
