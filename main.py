@@ -21,9 +21,10 @@ api_hash = "967046232d4fd5ad623f49fdba90592d"
 app = Client("my_account", api_id=api_id, api_hash=api_hash)
 
 class Route:
-    def __init__(self,  recipient_id,  is_anonym) -> None:
+    def __init__(self,  recipient_id,  is_anonym, not_duplicate) -> None:
         self.recipient_id = recipient_id
         self.is_anonym = is_anonym
+        self.not_duplicate =not_duplicate
 
 
 async def actual_chat_control(message):
@@ -142,7 +143,8 @@ async def get_route(message):
             result.append(
                 Route(
                     recipient_id=ans.recipient_id,
-                    is_anonym=ans.is_anonym
+                    is_anonym=ans.is_anonym,
+                    not_duplicate=ans.not_duplicate
                 )
             )
     return result
@@ -163,7 +165,7 @@ async def my_handler(client, message):
         )
         answer = await database.fetch_one(query)
         chat_id = int(answer.tg_chat_id)
-        if answer.not_duplicate:
+        if r.not_duplicate:
             short_text = short_text(message.text)
             text_data.select().where(
                 text_data.c.message_text==short_text
@@ -173,7 +175,7 @@ async def my_handler(client, message):
                 return
             value = {
                 'chat_id': chat_id,
-                'message_text': short_text,
+                'message_text': short_text
             }
             query = text_data.insert().values(**value)
             await database.execute(query)
