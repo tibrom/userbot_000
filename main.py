@@ -108,7 +108,7 @@ def words_control(words, message_text):
     return False
 
 
-def short_text(text):
+def get_short_text(text):
     result = ''
     text = text.strip()
     data = text.split(' ')
@@ -166,7 +166,7 @@ async def my_handler(client, message):
         answer = await database.fetch_one(query)
         chat_id = int(answer.tg_chat_id)
         if r.not_duplicate:
-            short_text = short_text(message.text)
+            short_text = get_short_text(message.text)
             text_data.select().where(
                 text_data.c.message_text==short_text
             )
