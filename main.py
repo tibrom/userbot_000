@@ -167,10 +167,10 @@ async def my_handler(client, message):
         if r.not_duplicate:
             short_text = get_short_text(message.text)
             print(short_text)
-            text_data.select().where(
-                text_data.c.id==1000
+            query = text_data.select().where(
+                text_data.c.message_text==short_text
             )
-            ans = await database.fetch_all(query)
+            ans = await database.fetch_one(query)
             print('answer',ans)
             if ans is not None:
                 return
