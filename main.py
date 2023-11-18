@@ -171,6 +171,7 @@ async def my_handler(client, message):
                 text_data.c.message_text==short_text
             )
             answer = await database.fetch_one(query)
+            print('answer',answer)
             if answer is not None:
                 return
             value = {
