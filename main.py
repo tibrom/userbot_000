@@ -175,7 +175,7 @@ async def my_handler(client, message):
             if ans is not None:
                 return
             value = {
-                'chat_id': chat_id,
+                'chat_id': r.recipient_id,
                 'message_text': short_text
             }
             query = text_data.insert().values(**value)
