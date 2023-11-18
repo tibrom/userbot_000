@@ -168,7 +168,7 @@ async def my_handler(client, message):
             short_text = get_short_text(message.text)
             print(short_text)
             text_data.select().where(
-                text_data.c.message_text==short_text
+                text_data.c.message_text=='ssss'
             )
             ans = await database.fetch_all(query)
             print('answer',ans)
