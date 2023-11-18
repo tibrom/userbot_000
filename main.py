@@ -1,4 +1,4 @@
-
+import os
 import asyncio
 import signal
 import hashlib
@@ -15,9 +15,8 @@ from db.base import database
 
 
 
-
-api_id = 20342362
-api_hash = "967046232d4fd5ad623f49fdba90592d"
+api_id = os.getenv('API_ID')
+api_hash = os.getenv('API_HASH')
 
 app = Client("my_account", api_id=api_id, api_hash=api_hash)
 

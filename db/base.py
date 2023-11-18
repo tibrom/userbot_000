@@ -5,7 +5,7 @@ import os
 
 
 
-DATABASE_URL = "postgresql://root:root@localhost:32704/bot_data" #os.getenv('DATABASE_URL')
+DATABASE_URL = "postgresql://root:root@bot_db:5432/bot_data" #os.getenv('DATABASE_URL')
 
 database = Database(DATABASE_URL)
 metadata = MetaData()

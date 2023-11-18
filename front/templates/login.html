@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container">
+    <div class="row justify-content-center mt-5">
+      <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('login') }}">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                      <label for="login_text" class="form-label">Логин</label>
+                      {{ form.username(class="form-control", id="login_text") }}
+                    </div>
+                    <div class="mb-3">
+                      <label for="exampleInputPassword1" class="form-label">Пароль</label>
+                      {{ form.password(class="form-control", id="exampleInputPassword1") }}
+                    </div>
+                    <div class="mb-3 form-check">
+                      {{ form.remember(class="form-check-input", id="exampleCheck1") }}
+                      <label class="form-check-label" for="exampleCheck1">Запомнить меня</label>
+                    </div>
+                    {{ form.submit(class="btn btn-primary") }}
+                </form>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

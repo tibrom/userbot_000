@@ -1,0 +1,19 @@
+FROM python:3.9
+
+
+WORKDIR /data
+
+
+COPY ./front_requirements.txt /code/front_requirements.txt
+RUN pip config set global.index-url https://pypi.org/simple
+RUN pip config set global.extra-index-url https://pypi.org/simple
+
+RUN pip install --no-cache-dir --upgrade -r /code/front_requirements.txt
+RUN pip install -U Flask
+
+
+COPY . /data
+COPY ./static /data/front/static
+
+
+CMD ["python", "./front/app.py"]

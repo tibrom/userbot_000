@@ -12,6 +12,32 @@ services:
       - POSTGRES_DB=bot_data
     networks:
       - botnetwork3
+  front:
+    build:
+      context: .
+      dockerfile: Dockerfile_front
+    container_name: router_front
+    restart: always
+    environment:
+      - LOGIN=administrator #токен телеграм бота, можно передать через перемменную окружения
+      - PASSWORD=3jf95hjy503ffj
+      - PREFIX=/route-message
+    ports:
+      - 27656:5000
+    networks:
+      - botnetwork3
+  user_bot_data:
+    build:
+      context: .
+      dockerfile: Dockerfile_userbot
+    container_name: user_bot_data
+    restart: always
+    environment:
+      - API_HASH = 967046232d4fd5ad623f49fdba90592d
+      - API_ID = 20342362
+
+    networks:
+      - botnetwork3
   
 networks:
   botnetwork3:

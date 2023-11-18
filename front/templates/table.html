@@ -1,0 +1,107 @@
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th class="w-20">Название чата</th>
+            <th class="w-20">Ключевые слова</th>
+            <th class="w-20">Исключить слова</th>
+            <th class="w-15">Отправить в чат</th>
+            <th class="w-10">Источник /<br>Недублировать</th>
+            <th class="w-15">Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for chat in chats %}
+        <tr>
+            <td class="w-20" >
+                <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal{{chat.chat_name.id}}">
+                  <small>{{ chat.chat_name.name[:25] }}...</small>
+                </button>
+                  
+                  <!-- Modal -->
+                  <div class="modal fade" id="exampleModal{{chat.chat_name.id}}" tabindex="-1" aria-labelledby="exampleModal{{chat.chat_name.id}}Label" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModal{{chat.chat_name.id}}Label">{{ chat.chat_name.name[:25] }}</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            {{ chat.chat_name.name }}
+                        </div>
+                        <div class="modal-footer"> <br></div>
+                        
+                      </div>
+                    </div>
+                  </div>
+                </td>
+            <td class="w-20 text-wrap">
+                <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#keywordsModal{{chat.id}}">
+                  <small>{{chat.keywords[:25]}}...</small>
+                </button>
+                  
+                  <!-- Modal -->
+                  <div class="modal fade" id="keywordsModal{{chat.id}}" tabindex="-1" aria-labelledby="keywordsModal{{chat.id}}Label" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="keywordsModal{{chat.id}}Label">{{chat.keywords[:50]}}</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          
+                        </div>
+                        <div class="modal-body">
+                            {{chat.keywords}}
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                          <a href="{{PREFIX}}/editchat/{{chat.id}}" class="btn btn-primary">Редактировать</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+            </td>
+
+            <td class="w-20 text-wrap">
+              <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#excludewordsModal{{chat.id}}">
+                <small>{{chat.excludewords[:25]}}...</small>
+              </button>
+                
+                <!-- Modal -->
+                <div class="modal fade" id="excludewordsModal{{chat.id}}" tabindex="-1" aria-labelledby="excludewordsModal{{chat.id}}Label" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="excludewordsModal{{chat.id}}Label">{{chat.excludewords[:50]}}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        
+                      </div>
+                      <div class="modal-body">
+                          {{chat.excludewords}}
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                        <a href="{{PREFIX}}/editchat/{{chat.id}}" class="btn btn-primary">Редактировать</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </td>
+
+
+            <td class="w-15">{{ chat.recipient.name }}</td>
+            <td class="w-10">{% if chat.is_anonym %} <small>Не указывать/</small> {%else%}<small>Указать/</small>{% endif %}
+              {% if chat.not_duplicate %} <small>Включен</small> {%else%}<small>Выключен</small>{% endif %}
+            </td>
+            
+            <td class="w-15">
+                <a href="{{PREFIX}}/editchat/{{chat.id}}" class="btn btn-sm btn-primary mx-1  btn-custom-size">Редактировать</a>
+                <a href="{{PREFIX}}/delete/{{chat.id}}" class="btn btn-sm btn-danger mx-1  btn-custom-size">Удалить</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+
+
