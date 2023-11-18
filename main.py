@@ -1,6 +1,7 @@
 
 import asyncio
 import signal
+import hashlib
 
 from sqlalchemy import select, func, distinct
 from pyrogram import Client, idle
@@ -109,13 +110,11 @@ def words_control(words, message_text):
 
 
 def get_short_text(text):
-    result = ''
-    text = text.strip()
-    data = text.split(' ')
-    for tx in  data:
-        tx.strip()
-        result += tx[0]
-    return result
+    hash_object = hashlib.md5(text.encode())
+    unique_string = hash_object.hexdigest()
+
+    # Возвращаем первые 8 символов для сокращения строки
+    return unique_string[:15]
 
 
 
