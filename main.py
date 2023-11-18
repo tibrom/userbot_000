@@ -170,7 +170,7 @@ async def my_handler(client, message):
             text_data.select().where(
                 text_data.c.message_text==short_text
             )
-            ans = await database.fetch_one(query)
+            ans = await database.fetch_all(query)
             print('answer',ans)
             if ans is not None:
                 return
