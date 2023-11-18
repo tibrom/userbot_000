@@ -167,6 +167,7 @@ async def my_handler(client, message):
         chat_id = int(answer.tg_chat_id)
         if r.not_duplicate:
             short_text = get_short_text(message.text)
+            print(short_text)
             text_data.select().where(
                 text_data.c.message_text==short_text
             )
