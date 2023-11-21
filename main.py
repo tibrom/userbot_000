@@ -18,7 +18,7 @@ from db.base import database
 api_id = os.getenv('API_ID')
 api_hash = os.getenv('API_HASH')
 
-app = Client("my_account", api_id=api_id, api_hash=api_hash)
+app = Client("my_prod", api_id=api_id, api_hash=api_hash)
 
 class Route:
     def __init__(self,  recipient_id,  is_anonym, not_duplicate) -> None:
@@ -71,26 +71,6 @@ async def other_chats_in_user(message):
             query = chats.insert().values(**value)
             await database.execute(query)
 
-'''
-async def get_route(message):
-    if message.text is None:
-        return []
-    result = []
-    chat = message.chat
-    search_query = select([chats, message_routing]).join(message_routing, chats.c.id == message_routing.c.sender_id).where(
-        chats.c.tg_chat_id == str(chat.id)
-    )
-    answer = await database.fetch_all(search_query)
-    for ans in answer:
-        if ans.recipient_id in result:
-            continue
-        triggers = ans.trigger_words.lower().replace(" ", "").split(',')
-        for trigger in triggers:
-            if '+' in trigger:
-                trigger.replace("+", " ")
-            if trigger in message.text.lower():
-                result.append(ans.recipient_id)
-    return result'''
 
 
 
@@ -150,7 +130,7 @@ async def get_route(message):
 
 
 #MessageServiceType.NEW_CHAT_MEMBERS
-async def my_handler(client, message):
+async def main_handler(client, message):
     chat = message.chat
     if hasattr(message, 'service'):
         await actual_chat_control(message)
@@ -205,7 +185,7 @@ async def chat_member(client, update: ChatMemberUpdated):
 
 
 
-#app.add_handler(MessageHandler(my_handler))
+#app.add_handler(MessageHandler(main_handler))
 #app.add_handler(ChatMemberUpdatedHandler(chat_member))
 #app.run()
 
@@ -213,7 +193,7 @@ async def chat_member(client, update: ChatMemberUpdated):
 async def main():
     await database.connect()
     app = Client("my_account", api_id=api_id, api_hash=api_hash)
-    app.add_handler(MessageHandler(my_handler))
+    app.add_handler(MessageHandler(main_handler))
     app.add_handler(ChatMemberUpdatedHandler(chat_member))
     await app.start()
     await idle()
