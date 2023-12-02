@@ -19,7 +19,7 @@ from db.base import database
 api_id = os.getenv('API_ID')
 api_hash = os.getenv('API_HASH')
 
-app = Client("my_prod", api_id=api_id, api_hash=api_hash)
+app = Client("session23", api_id=api_id, api_hash=api_hash)
 
 class Route:
     def __init__(self,  recipient_id,  is_anonym, not_duplicate, prefix) -> None:
@@ -230,7 +230,7 @@ async def chat_member(client, update: ChatMemberUpdated):
 
 async def main():
     await database.connect()
-    app = Client("my_account", api_id=api_id, api_hash=api_hash)
+    app = Client("session23", api_id=api_id, api_hash=api_hash)
     app.add_handler(MessageHandler(main_handler))
     app.add_handler(ChatMemberUpdatedHandler(chat_member))
     await app.start()
