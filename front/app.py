@@ -58,7 +58,7 @@ def serve_static(filename):
 def start():
     chats = get_tiggers()
 
-    return render_template('main.html', chats=chats, bot_user="Иванов", PREFIX=PREFIX)
+    return render_template('main.html', chats=chats, bot_user="Менеджер", PREFIX=PREFIX)
 
 
 @app.route(f'{PREFIX}/editchat/<int:addchat_id>', methods=['GET', 'POST'])
@@ -102,7 +102,7 @@ def editchat(addchat_id):
     return render_template(
         'editchat.html',
         chat=chat,
-        bot_user="Иванов",
+        bot_user="Менеджер",
         addchat_id =addchat_id,
         all_chat = cahats.all_chat,
         all_recipient = cahats.recipient,
@@ -153,7 +153,7 @@ def addchat():
     
     return render_template(
         'addchat.html',
-        bot_user="Иванов",
+        bot_user="Менеджер",
         all_chat = cahats.all_chat,
         all_recipient = cahats.recipient,
         PREFIX=PREFIX
