@@ -33,8 +33,8 @@ services:
     container_name: user_bot_data
     restart: always
     environment:
-      - API_HASH = 967046232d4fd5ad623f49fdba90592d
-      - API_ID = 20342362
+      - API_HASH=967046232d4fd5ad623f49fdba90592d
+      - API_ID=20342362
 
     networks:
       - botnetwork3
