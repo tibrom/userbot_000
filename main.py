@@ -205,7 +205,7 @@ async def main_handler(client, message):
             query = text_data.insert().values(**value)
             await database.execute(query)
         if r.is_anonym:
-            await client.send_message(chat_id, str(text) + message.text)
+            await client.send_message(chat_id, str(text) +'\n'+ message.text)
         else:
             if r.prefix is not None and r.prefix != '':
                 await client.send_message(chat_id, r.prefix)
