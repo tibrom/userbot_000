@@ -89,9 +89,12 @@ def check_phone_number(phone_number):
                 result += ' '
                 is_number = False
         result += y
+    print(text)
     match = re.search(r'\b\d{7}\b|\b\d{10}\b|\b\d{11}\b', result )
     if match:
+        print('есть телефон')
         return True
+    print('нет телефона')
     return False
 
 
@@ -205,7 +208,6 @@ async def main_handler(client, message):
             await client.send_message(chat_id, f'источник: {chat.title} ({chat.username})', reply_to_message_id=message.id)
     
 
-    print(message)
     
     if message.service==MessageServiceType.LEFT_CHAT_MEMBERS:
         print(f'')
