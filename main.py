@@ -98,8 +98,14 @@ def check_phone_number(phone_number):
     return False
 
 
+
+def not_phone_number(text):
+    return not check_phone_number(text)
+
+
 key_text = {
-    '*нет-телефона': check_phone_number
+    '*нет-телефона': not_phone_number,
+    '*есть-телефон': check_phone_number
 }
 
 def words_control(words, message_text):
