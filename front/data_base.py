@@ -15,6 +15,7 @@ class Chat:
         is_anonym: bool, 
         not_duplicate: bool = False,
         excludewords:str = '',
+        prefix: str = '',
         id: int = 0
     ) -> None:
         self.id = id
@@ -24,6 +25,7 @@ class Chat:
         self.recipient = recipient 
         self.is_anonym = is_anonym
         self.not_duplicate = not_duplicate
+        self.prefix =prefix
 
 
 class InfoAllChat:
@@ -67,6 +69,7 @@ def get_tiggers():
                 excludewords=dt[4] if dt[4] is not None else '',
                 is_anonym = dt[5] if dt[5] is not None else False,
                 not_duplicate = dt[6] if dt[6] is not None else False,
+                prefix=dt[7],
                 id=dt[0]
             )
         )
@@ -79,6 +82,7 @@ def get_tigger(chats: InfoAllChat, id) -> Chat:
         with conn.cursor() as cur:
             cur.execute(query, (str(id),))
             routing = cur.fetchone()
+    print(routing)
     
     return Chat(
         chat_name=chats.data_dict[routing[1]],
@@ -87,6 +91,7 @@ def get_tigger(chats: InfoAllChat, id) -> Chat:
         excludewords=routing[4] if routing[4] is not None else '',
         is_anonym = routing[5] if routing[5] is not None else False,
         not_duplicate = routing[6] if routing[6] is not None else False,
+        prefix=routing[7],
         id=routing[0]
     )
 
@@ -98,7 +103,8 @@ def update_tigger(
     trigger_words: str,
     exclude_words: str,
     is_anonym: bool,
-    not_duplicate: bool
+    not_duplicate: bool,
+    prefix: str,
 ) -> None:
     print('update_tigger')
     print(recipient_id)
@@ -108,8 +114,8 @@ def update_tigger(
     ON chats.id = message_routing.sender_id WHERE chats.id = %s;"""
     chat_query = "SELECT chats.id, chats.is_writable FROM chats WHERE chats.id = %s;"
 
-    query = "UPDATE MESSAGE_ROUTING SET sender_id = %s, recipient_id = %s, trigger_words = %s, exclude_words =%s, is_anonym=%s, not_duplicate=%s WHERE id = %s;"
-    data = (sender_id, recipient_id, trigger_words, exclude_words, is_anonym, not_duplicate, addchat_id)
+    query = "UPDATE MESSAGE_ROUTING SET sender_id = %s, recipient_id = %s, trigger_words = %s, exclude_words =%s, is_anonym=%s, not_duplicate=%s, prefix=%s WHERE id = %s;"
+    data = (sender_id, recipient_id, trigger_words, exclude_words, is_anonym, not_duplicate, prefix, addchat_id)
     with get_db_connection() as conn:
         with conn.cursor() as cur:
             cur.execute(search_sender, (recipient_id,))
@@ -157,7 +163,8 @@ def add_tiggers(
     trigger_words: str,
     exclude_words: str,
     is_anonym: bool,
-    not_duplicate: bool
+    not_duplicate: bool,
+    prefix: str
 ) -> None:
     print('sender_id', sender_id, 'recipient_id', recipient_id, 'trigger_words', trigger_words)
     if sender_id == recipient_id:
@@ -165,8 +172,8 @@ def add_tiggers(
     search_sender = """SELECT chats.id, chats.is_writable FROM chats INNER JOIN message_routing 
     ON chats.id = message_routing.sender_id WHERE chats.id = %s;"""
     chat_query = "SELECT chats.id, chats.is_writable FROM chats WHERE chats.id = %s;"
-    query = "INSERT INTO MESSAGE_ROUTING (sender_id, recipient_id, trigger_words, exclude_words, is_anonym, not_duplicate) VALUES (%s, %s, %s, %s, %s, %s);"
-    data = (sender_id, recipient_id, trigger_words, exclude_words, is_anonym, not_duplicate)
+    query = "INSERT INTO MESSAGE_ROUTING (sender_id, recipient_id, trigger_words, exclude_words, is_anonym, not_duplicate, prefix) VALUES (%s, %s, %s, %s, %s, %s, %s);"
+    data = (sender_id, recipient_id, trigger_words, exclude_words, is_anonym, not_duplicate, prefix)
     with get_db_connection() as conn:
         with conn.cursor() as cur:
             cur.execute(search_sender, (recipient_id,))

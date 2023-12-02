@@ -74,6 +74,7 @@ def editchat(addchat_id):
         trigger_words = request.form['trigger_words']
         recipient_id = request.form['recipient_id']
         exclude_words = request.form['exclude_words']
+        prefix = request.form['prefix']
         if request.form.get('is_anonym') == 'yes':
             is_anonym = True
         else:
@@ -90,7 +91,8 @@ def editchat(addchat_id):
             addchat_id=addchat_id,
             exclude_words=exclude_words,
             is_anonym=is_anonym,
-            not_duplicate=not_duplicate
+            not_duplicate=not_duplicate,
+            prefix=prefix
         )
         #chat.chat_name = request.form['name']
         #chat.keywords = request.form['keywords']
@@ -126,6 +128,7 @@ def addchat():
         trigger_words = request.form['trigger_words']
         recipient_id = request.form['recipient_id']
         exclude_words = request.form['exclude_words']
+        prefix = request.form['prefix']
         if request.form.get('is_anonym') == 'yes':
             is_anonym = True
         else:
@@ -141,7 +144,8 @@ def addchat():
             recipient_id=recipient_id,
             exclude_words=exclude_words,
             is_anonym=is_anonym,
-            not_duplicate =not_duplicate
+            not_duplicate =not_duplicate,
+            prefix =prefix
         )
         print(sender_id,  trigger_words, recipient_id)
         
