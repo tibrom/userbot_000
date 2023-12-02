@@ -22,10 +22,11 @@ api_hash = os.getenv('API_HASH')
 app = Client("my_prod", api_id=api_id, api_hash=api_hash)
 
 class Route:
-    def __init__(self,  recipient_id,  is_anonym, not_duplicate) -> None:
+    def __init__(self,  recipient_id,  is_anonym, not_duplicate, prefix) -> None:
         self.recipient_id = recipient_id
         self.is_anonym = is_anonym
         self.not_duplicate =not_duplicate
+        self.prefix = prefix
 
 
 async def actual_chat_control(message):
@@ -144,6 +145,7 @@ async def get_route(message):
             continue
         triggers = ans.trigger_words.split(',')
         stop_words = ans.exclude_words.split(',')
+        prefix = ans.prefix
         if words_control(words=stop_words, message_text=message.text):
             continue
         if words_control(words=triggers, message_text=message.text):
@@ -152,7 +154,8 @@ async def get_route(message):
                 Route(
                     recipient_id=ans.recipient_id,
                     is_anonym=ans.is_anonym,
-                    not_duplicate=ans.not_duplicate
+                    not_duplicate=ans.not_duplicate,
+                    prefix=prefix
                 )
             )
     return result
