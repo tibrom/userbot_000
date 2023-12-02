@@ -11,6 +11,8 @@ SECRET_KEY = '3f59-UE49N45UF4530VKNSALeuof480894JLroopir'
 LOGIN = os.getenv('LOGIN')
 PASSWORD =  os.getenv('PASSWORD')
 PREFIX = os.getenv('PREFIX')
+if PREFIX is None:
+    PREFIX = ''
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
