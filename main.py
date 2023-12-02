@@ -1,4 +1,5 @@
 import os
+import re
 import asyncio
 import signal
 import hashlib
@@ -71,17 +72,46 @@ async def other_chats_in_user(message):
             query = chats.insert().values(**value)
             await database.execute(query)
 
+def check_phone_number(phone_number):
+    result = ''
+    number = '0123456789'
+    is_number=False
+    
+    text = phone_number.replace(" ", "").replace("-", "").replace("(", "").replace(")", "")
+    for y in  text:
+        if y in number:
+            if not is_number:
+                result += ' '
+                is_number = True
+        else:
+            if is_number:
+                result += ' '
+                is_number = False
+        result += y
+    match = re.search(r'\b\d{7}\b|\b\d{10}\b|\b\d{11}\b', result )
+    if match:
+        return True
+    return False
 
 
+key_text = {
+    '*нет-телефона': check_phone_number
+}
 
 def words_control(words, message_text):
     for word in words:
         word = word.strip()
         if word != '':
             word = word.replace(" ", "").lower()
-            if '_' in word:  
+            if word in key_text:
+                return key_text[word](message_text)
+            if '_' in word:
                 wr = word.split('_')
                 if all(sub.replace(" ", "").lower() in   message_text.lower() for sub in wr):
+                    return True
+            elif '-' in word:
+                wr = word.replace("-", " ")
+                if wr in message_text.lower():
                     return True
             elif word in message_text.lower():
                 return True
@@ -142,6 +172,9 @@ async def main_handler(client, message):
             chats.c.id == r.recipient_id
         )
         answer = await database.fetch_one(query)
+        text = ''
+        if r.prefix is not None:
+            text = r.prefix
         chat_id = int(answer.tg_chat_id)
         if r.not_duplicate:
             short_text = get_short_text(message.text)
@@ -160,8 +193,10 @@ async def main_handler(client, message):
             query = text_data.insert().values(**value)
             await database.execute(query)
         if r.is_anonym:
-            await client.send_message(chat_id, message.text)
+            await client.send_message(chat_id, str(text) + message.text)
         else:
+            if r.prefix is not None and r.prefix != '':
+                await client.send_message(chat_id, r.prefix)
             await client.forward_messages(chat_id, int(chat.id), message.id)
             await asyncio.sleep(0,5)
             await client.send_message(chat_id, f'источник: {chat.title} ({chat.username})', reply_to_message_id=message.id)
