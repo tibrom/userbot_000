@@ -9,7 +9,8 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired
 
 
-
+script_dir = os.path.dirname(os.path.realpath(__file__))
+chat_control_script = os.path.join(script_dir, "chat_control.py")
 
 SECRET_KEY = '3f59-UE49N45UF4530VKNSALeuof480894JLroopir'
 LOGIN = os.getenv('LOGIN')
@@ -127,7 +128,7 @@ def deletetigger(addchat_id):
 @app.route(f'{PREFIX}/controlchat', methods=['GET'])
 @login_required
 def controlchat():
-    subprocess.run([sys.executable, "../chat_control.py"], check=True)
+    subprocess.run([sys.executable, chat_control_script], check=True)
         
     return redirect(f'{PREFIX}/')
     
