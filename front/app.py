@@ -156,7 +156,7 @@ def deletetigger(addchat_id):
 @app.route(f'{PREFIX}/controlchat', methods=['GET'])
 @login_required
 def controlchat():
-    result = subprocess.run([sys.executable, chat_control_script], check=True)
+    result = subprocess.run([sys.executable, '/data/chat_control.py'], check=True)
     logger.info(f"STDOUT: {result.stdout.decode()}")
     logger.info(f"STDERR: {result.stderr.decode()}")
     return redirect(f'{PREFIX}/')
