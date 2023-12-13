@@ -1,10 +1,14 @@
 import os
+import sys
+import subprocess
 from flask import Flask, request, render_template, redirect, url_for, send_from_directory
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from data_base import get_tiggers, get_all_chat, add_tiggers, get_tigger, update_tigger, delete_tigger
 from flask_wtf import FlaskForm, CSRFProtect
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired
+
+
 
 
 SECRET_KEY = '3f59-UE49N45UF4530VKNSALeuof480894JLroopir'
@@ -115,6 +119,15 @@ def editchat(addchat_id):
 @login_required
 def deletetigger(addchat_id):
     delete_tigger(addchat_id=addchat_id)
+        
+    return redirect(f'{PREFIX}/')
+
+
+
+@app.route(f'{PREFIX}/controlchat', methods=['GET'])
+@login_required
+def controlchat():
+    subprocess.run([sys.executable, "../chat_control.py"], check=True)
         
     return redirect(f'{PREFIX}/')
     
