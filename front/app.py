@@ -38,6 +38,7 @@ logger.addHandler(console_handler)
 
 script_dir = os.path.dirname(os.path.realpath(__file__))
 chat_control_script = os.path.join(script_dir, "chat_control.py")
+logger.info( f'chat_control_script {chat_control_script}')
 
 SECRET_KEY = '3f59-UE49N45UF4530VKNSALeuof480894JLroopir'
 LOGIN = os.getenv('LOGIN')
