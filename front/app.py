@@ -7,6 +7,7 @@ from data_base import get_tiggers, get_all_chat, add_tiggers, get_tigger, update
 from flask_wtf import FlaskForm, CSRFProtect
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired
+from logger import logger
 
 
 script_dir = os.path.dirname(os.path.realpath(__file__))
@@ -129,8 +130,8 @@ def deletetigger(addchat_id):
 @login_required
 def controlchat():
     result = subprocess.run([sys.executable, chat_control_script], check=True)
-    print("STDOUT:", result.stdout.decode())
-    print("STDERR:", result.stderr.decode())
+    logger.info(f"STDOUT: {result.stdout.decode()}")
+    logger.info(f"STDERR: {result.stderr.decode()}")
     return redirect(f'{PREFIX}/')
     
 
