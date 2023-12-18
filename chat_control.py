@@ -22,7 +22,6 @@ async def get_actual_chat(app):
     old_chat = await get_all_activ_chat()
     print(old_chat)
     async for dialog in app.get_dialogs():
-        
         chat = dialog.chat
         print(chat.id)
         old = old_chat.get(str(chat.id))
@@ -42,6 +41,12 @@ async def get_actual_chat(app):
             ).values(**value)
             await database.execute(query)
             old_chat.pop(str(chat.id))
+    for key, data in old_chat.items():
+        query = chats.delete().where(
+            chats.c.id==key,
+        )
+        await database.execute(query)
+
     
 
 
