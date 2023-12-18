@@ -42,10 +42,11 @@ async def get_actual_chat(app):
             await database.execute(query)
             old_chat.pop(str(chat.id))
     for key, data in old_chat.items():
+        print(data.id)
         query = chats.delete().where(
-            chats.c.id==key,
+            chats.c.id==data.id,
         )
-        await database.execute(query)
+        #await database.execute(query)
 
     
 
