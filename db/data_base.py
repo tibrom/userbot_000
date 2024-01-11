@@ -26,6 +26,18 @@ message_routing = Table(
     Column('prefix', String),
 )
 
+
+message_send_stats = Table(
+    'message_send_stats',
+    metadata,
+    Column('id', Integer, primary_key=True, autoincrement=True, unique= True),
+    Column('message_routing_id', Integer, ForeignKey('message_routing.id', ondelete="CASCADE"), nullable=False),
+    Column('sender_id', Integer, ForeignKey('chats.id', ondelete="CASCADE"), nullable=False),
+    Column('recipient_id', Integer, ForeignKey('chats.id', ondelete="CASCADE"), nullable=False),
+    Column('created_at', DateTime, default=datetime.datetime.utcnow()),
+    Column('trigger_word', String),
+)
+
 text_data = Table(
     'text_data',
     metadata,

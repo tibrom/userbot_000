@@ -45,7 +45,8 @@
     {% block content %}
     {% endblock %}
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('serve_static', filename='chart_script.js') }}"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js"></script>
 

@@ -62,8 +62,26 @@ def serve_static(filename):
 @login_required
 def start():
     chats = get_tiggers()
+    chart_labels = ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange']
+    chart_data = [12, 19, 3, 5, 2, 3]
 
-    return render_template('main.html', chats=chats, bot_user="Менеджер", PREFIX=PREFIX)
+    return render_template(
+        'main.html',
+        chats=chats,
+        bot_user="Менеджер",
+        PREFIX=PREFIX,
+        chart_labels=chart_labels, 
+        chart_data=chart_data
+    )
+
+@app.route(f'{PREFIX}/menu')
+@login_required
+def startmenu():
+    chats = get_all_chat()
+    chart_labels = ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange']
+    chart_data = [12, 19, 3, 5, 2, 3]
+
+    return render_template('menu.html', chats=chats, bot_user="Менеджер",  PREFIX=PREFIX, chart_labels=chart_labels, chart_data=chart_data)
 
 
 @app.route(f'{PREFIX}/editchat/<int:addchat_id>', methods=['GET', 'POST'])

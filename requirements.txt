@@ -8,3 +8,4 @@ Pyrogram==2.0.106
 PySocks==1.7.1
 SQLAlchemy==1.4.50
 TgCrypto==1.2.5
+python-dateutil

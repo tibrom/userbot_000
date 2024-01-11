@@ -1,5 +1,7 @@
 import psycopg2
-
+import datetime
+from dateutil.relativedelta import relativedelta
+from collections import defaultdict
 class InfoChat:
     def __init__(self,  name: str, id: int = 0,) -> None:
         self.id = id
@@ -36,13 +38,17 @@ class InfoAllChat:
 
 def get_db_connection():
     conn = psycopg2.connect(
-        host="bot_db",
-        port="5432",
+        host="extrabot.ru",
+        port="32704",
         database="bot_data",
         user='root',
         password='root'
     )
     return conn
+
+
+
+        
 
 
 def get_tiggers():
