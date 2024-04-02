@@ -58,6 +58,23 @@ def serve_static(filename):
 
 
 
+@app.route(f'{PREFIX}/report/')
+@login_required
+def report():
+    chats = get_tiggers()
+    chart_labels = ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange']
+    chart_data = [12, 19, 3, 5, 2, 3]
+
+    return render_template(
+        'report.html',
+        chats=chats,
+        bot_user="Менеджер",
+        PREFIX=PREFIX,
+        chart_labels=chart_labels, 
+        chart_data=chart_data
+    )
+
+
 @app.route(f'{PREFIX}/')
 @login_required
 def start():
